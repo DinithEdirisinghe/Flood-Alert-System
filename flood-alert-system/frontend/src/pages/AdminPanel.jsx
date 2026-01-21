@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { Settings, Plus, Edit, Trash2, Play, AlertCircle, CheckCircle, ArrowLeft, Activity, MapPin, X } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -102,65 +103,83 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 relative overflow-hidden">
+      {/* Animated Background Orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+        <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
+      </div>
+
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-600 to-purple-800 text-white p-4 shadow-lg">
-        <div className="container mx-auto">
-          <Link to="/" className="text-purple-100 hover:text-white mb-2 inline-block text-sm">
-            ← Back to Dashboard
+      <header className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow-xl border-b border-purple-700 relative z-10">
+        <div className="container mx-auto px-6 py-4">
+          <Link to="/" className="text-purple-50 hover:text-white mb-3 inline-flex items-center gap-2 text-sm font-medium transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
           </Link>
-          <h1 className="text-3xl font-bold">⚙️ Admin Panel</h1>
-          <p className="text-sm text-purple-100">Manage stations and simulate device data</p>
+          <div className="flex items-center gap-3 mt-2">
+            <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+              <Settings className="w-7 h-7" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Admin Panel</h1>
+              <p className="text-xs text-purple-50 font-medium">Manage stations and simulate device data</p>
+            </div>
+          </div>
         </div>
       </header>
 
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 relative z-10">
         {/* Action Buttons */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <button
             onClick={() => setShowAddModal(true)}
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition flex items-center justify-center"
+            className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-5 px-6 rounded-xl shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-3 border border-green-500"
           >
-            <span className="text-2xl mr-2">➕</span>
-            Add New Station
+            <Plus className="w-6 h-6" />
+            <span>Add New Station</span>
           </button>
           
           <button
             onClick={() => setShowSimulator(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition flex items-center justify-center"
+            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-5 px-6 rounded-xl shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-3 border border-blue-500"
           >
-            <span className="text-2xl mr-2">🎮</span>
-            Device Simulator
+            <Play className="w-6 h-6" />
+            <span>Device Simulator</span>
           </button>
           
           <button
             onClick={fetchStations}
-            className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition flex items-center justify-center"
+            className="bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold py-5 px-6 rounded-xl shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-3 border border-slate-500"
           >
-            <span className="text-2xl mr-2">🔄</span>
-            Refresh Stations
+            <Activity className="w-6 h-6" />
+            <span>Refresh Stations</span>
           </button>
         </div>
 
         {/* Stations List */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">📍 All Stations ({stations.length})</h2>
-          <div className="overflow-x-auto">
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl p-6 border border-slate-200">
+          <div className="flex items-center gap-2 mb-5">
+            <MapPin className="w-6 h-6 text-teal-600" />
+            <h2 className="text-2xl font-bold text-slate-800">All Stations ({stations.length})</h2>
+          </div>
+          <div className="overflow-x-auto rounded-lg border border-slate-200">
             <table className="min-w-full table-auto">
-              <thead className="bg-gray-100">
+              <thead className="bg-gradient-to-r from-slate-100 to-slate-200">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Station ID</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Name</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Location</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Warning</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Danger</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Status</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Actions</th>
+                  <th className="px-4 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Station ID</th>
+                  <th className="px-4 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Name</th>
+                  <th className="px-4 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Location</th>
+                  <th className="px-4 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Warning</th>
+                  <th className="px-4 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Danger</th>
+                  <th className="px-4 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Status</th>
+                  <th className="px-4 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {stations.map((station, index) => (
-                  <tr key={station.stationId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <tr key={station.stationId} className={`transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-teal-50`}>
                     <td className="px-4 py-3 text-sm font-mono">{station.stationId}</td>
                     <td className="px-4 py-3 text-sm">{station.name}</td>
                     <td className="px-4 py-3 text-sm">
@@ -180,14 +199,16 @@ const AdminPanel = () => {
                     <td className="px-4 py-3">
                       <button
                         onClick={() => openEditModal(station)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs mr-2"
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs mr-2 inline-flex items-center gap-1 transition-colors"
                       >
+                        <Edit className="w-3 h-3" />
                         Edit
                       </button>
                       <Link
                         to={`/station/${station.stationId}`}
-                        className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs inline-block"
+                        className="bg-teal-500 hover:bg-teal-600 text-white px-3 py-1.5 rounded-lg text-xs inline-flex items-center gap-1 transition-colors"
                       >
+                        <Activity className="w-3 h-3" />
                         View
                       </Link>
                     </td>
@@ -201,85 +222,88 @@ const AdminPanel = () => {
 
       {/* Add Station Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold mb-4">➕ Add New Station</h2>
+        <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl max-w-2xl w-full p-8 border border-slate-200 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center gap-3 mb-6">
+              <Plus className="w-7 h-7 text-teal-600" />
+              <h2 className="text-2xl font-bold text-slate-800">Add New Station</h2>
+            </div>
             <form onSubmit={handleAddStation}>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Station ID *</label>
+                  <label className="block text-sm font-bold mb-2 text-slate-700">Station ID *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g., my-device-01"
-                    className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white"
                     value={formData.stationId}
                     onChange={(e) => setFormData({...formData, stationId: e.target.value})}
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Station Name *</label>
+                  <label className="block text-sm font-bold mb-2 text-slate-700">Station Name *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g., My Device - Lab"
-                    className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white"
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold mb-1">Latitude *</label>
+                    <label className="block text-sm font-bold mb-2 text-slate-700">Latitude *</label>
                     <input
                       type="number"
                       step="0.0001"
                       required
                       placeholder="6.9271"
-                      className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500"
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white"
                       value={formData.lat}
                       onChange={(e) => setFormData({...formData, lat: e.target.value})}
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-semibold mb-1">Longitude *</label>
+                    <label className="block text-sm font-bold mb-2 text-slate-700">Longitude *</label>
                     <input
                       type="number"
                       step="0.0001"
                       required
                       placeholder="79.9831"
-                      className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500"
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white"
                       value={formData.lng}
                       onChange={(e) => setFormData({...formData, lng: e.target.value})}
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold mb-1">Warning Level (m) *</label>
+                    <label className="block text-sm font-bold mb-2 text-slate-700">Warning Level (m) *</label>
                     <input
                       type="number"
                       step="0.1"
                       required
                       placeholder="5.0"
-                      className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-orange-500"
+                      className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all bg-orange-50/50"
                       value={formData.warning}
                       onChange={(e) => setFormData({...formData, warning: e.target.value})}
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-semibold mb-1">Danger Level (m) *</label>
+                    <label className="block text-sm font-bold mb-2 text-slate-700">Danger Level (m) *</label>
                     <input
                       type="number"
                       step="0.1"
                       required
                       placeholder="7.0"
-                      className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-red-500"
+                      className="w-full px-4 py-3 border-2 border-red-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all bg-red-50/50"
                       value={formData.danger}
                       onChange={(e) => setFormData({...formData, danger: e.target.value})}
                     />
@@ -287,17 +311,18 @@ const AdminPanel = () => {
                 </div>
               </div>
 
-              <div className="flex gap-3 mt-6">
+              <div className="flex gap-4 mt-8">
                 <button
                   type="submit"
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  className="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                 >
+                  <Plus className="w-5 h-5" />
                   Create Station
                 </button>
                 <button
                   type="button"
                   onClick={() => { setShowAddModal(false); resetForm(); }}
-                  className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                  className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-4 px-6 rounded-xl transition-all"
                 >
                   Cancel
                 </button>
@@ -309,41 +334,44 @@ const AdminPanel = () => {
 
       {/* Edit Station Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold mb-4">✏️ Edit Station Thresholds</h2>
+        <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl max-w-2xl w-full p-8 border border-slate-200">
+            <div className="flex items-center gap-3 mb-6">
+              <Edit className="w-7 h-7 text-teal-600" />
+              <h2 className="text-2xl font-bold text-slate-800">Edit Station Thresholds</h2>
+            </div>
             <form onSubmit={handleEditStation}>
               <div className="space-y-4">
-                <div className="bg-gray-100 p-3 rounded">
-                  <p className="text-sm text-gray-600">Station ID</p>
-                  <p className="font-mono font-semibold">{formData.stationId}</p>
+                <div className="bg-gradient-to-r from-slate-50 to-slate-100 p-4 rounded-xl border-l-4 border-teal-500">
+                  <p className="text-sm text-slate-600 font-medium mb-1">Station ID</p>
+                  <p className="font-mono font-bold text-slate-800">{formData.stationId}</p>
                 </div>
 
-                <div className="bg-gray-100 p-3 rounded">
-                  <p className="text-sm text-gray-600">Name</p>
-                  <p className="font-semibold">{formData.name}</p>
+                <div className="bg-gradient-to-r from-slate-50 to-slate-100 p-4 rounded-xl border-l-4 border-cyan-500">
+                  <p className="text-sm text-slate-600 font-medium mb-1">Name</p>
+                  <p className="font-bold text-slate-800">{formData.name}</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4 mt-4">
                   <div>
-                    <label className="block text-sm font-semibold mb-1">Warning Level (m) *</label>
+                    <label className="block text-sm font-bold mb-2 text-slate-700">Warning Level (m) *</label>
                     <input
                       type="number"
                       step="0.1"
                       required
-                      className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-orange-500"
+                      className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all bg-orange-50/50"
                       value={formData.warning}
                       onChange={(e) => setFormData({...formData, warning: e.target.value})}
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-semibold mb-1">Danger Level (m) *</label>
+                    <label className="block text-sm font-bold mb-2 text-slate-700">Danger Level (m) *</label>
                     <input
                       type="number"
                       step="0.1"
                       required
-                      className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-red-500"
+                      className="w-full px-4 py-3 border-2 border-red-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all bg-red-50/50"
                       value={formData.danger}
                       onChange={(e) => setFormData({...formData, danger: e.target.value})}
                     />
@@ -351,17 +379,18 @@ const AdminPanel = () => {
                 </div>
               </div>
 
-              <div className="flex gap-3 mt-6">
+              <div className="flex gap-4 mt-8">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  className="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                 >
+                  <Edit className="w-5 h-5" />
                   Update Station
                 </button>
                 <button
                   type="button"
                   onClick={() => { setShowEditModal(false); setEditingStation(null); resetForm(); }}
-                  className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                  className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-4 px-6 rounded-xl transition-all"
                 >
                   Cancel
                 </button>
@@ -435,19 +464,22 @@ const DeviceSimulator = ({ stations, onClose }) => {
   }, [intervalId]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">🎮 Device Simulator</h2>
-        <p className="text-sm text-gray-600 mb-4">
-          Simulate IoT device sending data without physical hardware. Perfect for testing!
+    <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl max-w-2xl w-full p-8 border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center gap-3 mb-4">
+          <Activity className="w-7 h-7 text-teal-600" />
+          <h2 className="text-2xl font-bold text-slate-800">Device Simulator</h2>
+        </div>
+        <p className="text-sm text-slate-600 mb-6 bg-gradient-to-r from-cyan-50 to-blue-50 p-4 rounded-xl border-l-4 border-cyan-500">
+          <strong className="text-slate-800">Simulate IoT device data transmission</strong> without physical hardware. Perfect for testing and development!
         </p>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
-            <label className="block text-sm font-semibold mb-1">Select Station *</label>
+            <label className="block text-sm font-bold mb-2 text-slate-700">Select Station *</label>
             <select
               required
-              className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white disabled:opacity-50"
               value={selectedStation}
               onChange={(e) => setSelectedStation(e.target.value)}
               disabled={isRunning}
@@ -461,13 +493,13 @@ const DeviceSimulator = ({ stations, onClose }) => {
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold mb-1">Water Level (m)</label>
+              <label className="block text-sm font-bold mb-2 text-slate-700">Water Level (m)</label>
               <input
                 type="number"
                 step="0.1"
-                className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-blue-50/50 disabled:opacity-50"
                 value={waterLevel}
                 onChange={(e) => setWaterLevel(e.target.value)}
                 disabled={isRunning}
@@ -475,10 +507,10 @@ const DeviceSimulator = ({ stations, onClose }) => {
             </div>
             
             <div>
-              <label className="block text-sm font-semibold mb-1">Battery Level (%)</label>
+              <label className="block text-sm font-bold mb-2 text-slate-700">Battery Level (%)</label>
               <input
                 type="number"
-                className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-green-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-green-50/50 disabled:opacity-50"
                 value={batteryLevel}
                 onChange={(e) => setBatteryLevel(e.target.value)}
                 disabled={isRunning}
@@ -486,50 +518,56 @@ const DeviceSimulator = ({ stations, onClose }) => {
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-4 mt-6">
             {!isRunning ? (
               <button
                 onClick={startSimulation}
                 disabled={!selectedStation}
-                className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded"
+                className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-slate-400 disabled:to-slate-400 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
               >
-                ▶️ Start Simulation (Every 10s)
+                <Play className="w-5 h-5" />
+                Start Simulation (Every 10s)
               </button>
             ) : (
               <button
                 onClick={stopSimulation}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                className="flex-1 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
               >
-                ⏹️ Stop Simulation
+                <Activity className="w-5 h-5" />
+                Stop Simulation
               </button>
             )}
             
             <button
               onClick={sendData}
               disabled={!selectedStation || isRunning}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded"
+              className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 disabled:from-slate-400 disabled:to-slate-400 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
             >
-              📤 Send Once
+              <Activity className="w-5 h-5" />
+              Send Once
             </button>
           </div>
 
           {/* Log */}
-          <div>
-            <h3 className="font-semibold mb-2">Activity Log</h3>
-            <div className="bg-gray-900 text-green-400 p-3 rounded font-mono text-xs h-48 overflow-y-auto">
+          <div className="mt-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Activity className="w-5 h-5 text-teal-600" />
+              <h3 className="font-bold text-slate-800">Activity Log</h3>
+            </div>
+            <div className="bg-slate-900 text-emerald-400 p-4 rounded-xl font-mono text-xs h-48 overflow-y-auto border-2 border-slate-700 shadow-inner">
               {log.length === 0 ? (
-                <div className="text-gray-500">Waiting for data transmission...</div>
+                <div className="text-slate-500 italic">Waiting for data transmission...</div>
               ) : (
-                log.map((entry, i) => <div key={i}>{entry}</div>)
+                log.map((entry, i) => <div key={i} className="mb-1">{entry}</div>)
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-4 mt-8">
           <button
             onClick={onClose}
-            className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+            className="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-4 px-6 rounded-xl transition-all"
           >
             Close
           </button>

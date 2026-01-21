@@ -1,4 +1,5 @@
 import React from 'react';
+import { Activity, Droplets, Battery, AlertTriangle } from 'lucide-react';
 
 const StatsOverview = ({ stations }) => {
   const totalStations = stations.length;
@@ -19,29 +20,33 @@ const StatsOverview = ({ stations }) => {
   ).length;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-      <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 rounded-lg shadow-lg">
-        <div className="text-xs opacity-90 mb-1">Total Stations</div>
-        <div className="text-2xl font-bold">{totalStations}</div>
-        <div className="text-xs mt-1 opacity-75">{activeStations} active</div>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="bg-gradient-to-br from-teal-500 to-cyan-600 text-white p-5 rounded-xl shadow-lg border border-teal-600">
+        <Activity className="w-6 h-6 mb-2 opacity-90" />
+        <div className="text-xs opacity-90 font-medium mb-1">Total Stations</div>
+        <div className="text-3xl font-bold">{totalStations}</div>
+        <div className="text-xs mt-1 opacity-80">{activeStations} active</div>
       </div>
 
-      <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-lg shadow-lg">
-        <div className="text-xs opacity-90 mb-1">Avg Water Level</div>
-        <div className="text-2xl font-bold">{avgWaterLevel.toFixed(2)}m</div>
-        <div className="text-xs mt-1 opacity-75">Across all stations</div>
+      <div className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white p-5 rounded-xl shadow-lg border border-blue-600">
+        <Droplets className="w-6 h-6 mb-2 opacity-90" />
+        <div className="text-xs opacity-90 font-medium mb-1">Avg Water Level</div>
+        <div className="text-3xl font-bold">{avgWaterLevel.toFixed(2)}m</div>
+        <div className="text-xs mt-1 opacity-80">Across all stations</div>
       </div>
 
-      <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-4 rounded-lg shadow-lg">
-        <div className="text-xs opacity-90 mb-1">Avg Battery</div>
-        <div className="text-2xl font-bold">{avgBattery.toFixed(0)}%</div>
-        <div className="text-xs mt-1 opacity-75">System health</div>
+      <div className="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-5 rounded-xl shadow-lg border border-green-600">
+        <Battery className="w-6 h-6 mb-2 opacity-90" />
+        <div className="text-xs opacity-90 font-medium mb-1">Avg Battery</div>
+        <div className="text-3xl font-bold">{avgBattery.toFixed(0)}%</div>
+        <div className="text-xs mt-1 opacity-80">System health</div>
       </div>
 
-      <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-4 rounded-lg shadow-lg">
-        <div className="text-xs opacity-90 mb-1">High Risk Areas</div>
-        <div className="text-2xl font-bold">{highRiskAreas}</div>
-        <div className="text-xs mt-1 opacity-75">Requires attention</div>
+      <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-5 rounded-xl shadow-lg border border-orange-600">
+        <AlertTriangle className="w-6 h-6 mb-2 opacity-90" />
+        <div className="text-xs opacity-90 font-medium mb-1">High Risk Areas</div>
+        <div className="text-3xl font-bold">{highRiskAreas}</div>
+        <div className="text-xs mt-1 opacity-80">Requires attention</div>
       </div>
     </div>
   );

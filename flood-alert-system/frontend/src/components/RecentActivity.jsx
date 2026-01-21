@@ -1,4 +1,5 @@
 import React from 'react';
+import { Clock, AlertCircle, AlertTriangle, Info } from 'lucide-react';
 
 const RecentActivity = ({ stations }) => {
   // Generate activity log based on station statuses
@@ -13,7 +14,8 @@ const RecentActivity = ({ stations }) => {
     if (status === 'DANGER') {
       activities.push({
         type: 'danger',
-        message: `🔴 Critical alert at ${station.name}`,
+        Icon: AlertCircle,
+        message: `Critical alert at ${station.name}`,
         detail: `Water level: ${waterLevel}m`,
         time: `${minutesAgo}m ago`,
         timestamp: lastUpdated
@@ -21,7 +23,8 @@ const RecentActivity = ({ stations }) => {
     } else if (status === 'WARNING') {
       activities.push({
         type: 'warning',
-        message: `🟠 Warning issued for ${station.name}`,
+        Icon: AlertTriangle,
+        message: `Warning issued for ${station.name}`,
         detail: `Water level: ${waterLevel}m`,
         time: `${minutesAgo}m ago`,
         timestamp: lastUpdated
@@ -35,35 +38,49 @@ const RecentActivity = ({ stations }) => {
   // Add some system activities
   activities.push({
     type: 'info',
-    message: '✅ System health check completed',
+    Icon: Info,
+    message: 'System health check completed',
     detail: 'All sensors responding',
     time: '5m ago'
   });
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-4 mb-4">
-      <h3 className="font-bold text-lg mb-3">Recent Activity</h3>
-      <div className="space-y-2 max-h-64 overflow-y-auto">
-        {activities.slice(0, 10).map((activity, index) => (
-          <div
-            key={index}
-            className={`p-3 rounded border-l-4 text-sm ${
-              activity.type === 'danger'
-                ? 'bg-red-50 border-red-500'
-                : activity.type === 'warning'
-                ? 'bg-orange-50 border-orange-500'
-                : 'bg-blue-50 border-blue-500'
-            }`}
-          >
-            <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <div className="font-semibold text-xs">{activity.message}</div>
-                <div className="text-xs text-gray-600 mt-1">{activity.detail}</div>
+    <div className="bg-white rounded-xl shadow-lg p-5 border border-slate-200">
+      <div className="flex items-center gap-2 mb-4">
+        <Clock className="w-5 h-5 text-teal-600" />
+        <h3 className="font-bold text-lg text-slate-800">Recent Activity</h3>
+      </div>
+      <div className="space-y-2.5 max-h-64 overflow-y-auto">
+        {activities.slice(0, 10).map((activity, index) => {
+          const ActivityIcon = activity.Icon;
+          return (
+            <div
+              key={index}
+              className={`p-3 rounded-lg border-l-4 text-sm transition-all hover:shadow-md ${
+                activity.type === 'danger'
+                  ? 'bg-red-50 border-red-500'
+                  : activity.type === 'warning'
+                  ? 'bg-orange-50 border-orange-500'
+                  : 'bg-blue-50 border-blue-500'
+              }`}
+            >
+              <div className="flex justify-between items-start gap-3">
+                <div className="flex items-start gap-2 flex-1">
+                  <ActivityIcon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
+                    activity.type === 'danger' ? 'text-red-600' :
+                    activity.type === 'warning' ? 'text-orange-600' :
+                    'text-blue-600'
+                  }`} />
+                  <div>
+                    <div className="font-semibold text-xs text-slate-800">{activity.message}</div>
+                    <div className="text-xs text-slate-600 mt-1">{activity.detail}</div>
+                  </div>
+                </div>
+                <span className="text-xs text-slate-500 whitespace-nowrap">{activity.time}</span>
               </div>
-              <span className="text-xs text-gray-500 ml-2">{activity.time}</span>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
