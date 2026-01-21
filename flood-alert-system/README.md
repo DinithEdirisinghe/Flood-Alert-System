@@ -20,6 +20,7 @@ A real-time flood monitoring dashboard built with the MERN stack for tracking wa
 ## 🛠️ Tech Stack
 
 **Frontend:**
+
 - React (Vite)
 - Tailwind CSS
 - React-Leaflet (Maps)
@@ -27,6 +28,7 @@ A real-time flood monitoring dashboard built with the MERN stack for tracking wa
 - Axios
 
 **Backend:**
+
 - Node.js
 - Express.js
 - MongoDB (Mongoose)
@@ -76,14 +78,17 @@ flood-alert-system/
 ### Quick Setup (PowerShell)
 
 1. **Navigate to project directory**
+
    ```powershell
    cd "d:\Embedded Project\flood-alert-system"
    ```
 
 2. **Run the setup script**
+
    ```powershell
    .\setup.ps1
    ```
+
    This will:
    - Install backend dependencies
    - Seed the database with 10 stations and realistic data
@@ -99,36 +104,43 @@ flood-alert-system/
 ### Manual Installation
 
 1. **Clone the repository**
+
    ```bash
    cd "d:\Embedded Project\flood-alert-system"
    ```
 
 2. **Set up the Backend**
+
    ```bash
    cd backend
    npm install
    ```
 
 3. **Configure Environment Variables**
-   
+
    Update `backend/.env` if needed:
+
    ```
    PORT=5000
    MONGODB_URI=mongodb://localhost:27017/flood-alert-system
    ```
 
 4. **Seed the Database**
+
    ```bash
    npm run seed
    ```
 
 5. **Start the Backend Server**
+
    ```bash
    npm run dev
    ```
+
    Server will run on `http://localhost:5000`
 
 6. **Set up the Frontend** (in a new terminal)
+
    ```bash
    cd frontend
    npm install
@@ -154,6 +166,7 @@ flood-alert-system/
 - `POST /api/readings` - Submit a new reading
 
 **Example POST request to submit reading:**
+
 ```json
 {
   "stationId": "kelani-01",
@@ -177,7 +190,7 @@ The system includes 10 pre-configured monitoring stations across Sri Lanka:
 9. **Attanagalu Oya** - Gampaha
 10. **Deduru Oya** - Kurunegala
 
-*Note: These are demonstration stations with simulated data. In production, one physical IoT device will be deployed and connected to the system.*
+_Note: These are demonstration stations with simulated data. In production, one physical IoT device will be deployed and connected to the system._
 
 ## 🎨 Alert Levels
 
@@ -221,10 +234,12 @@ You can add new monitoring stations via the API or directly in MongoDB:
 ## 🚀 Deployment
 
 ### Backend Deployment
+
 - Deploy to services like Heroku, Railway, or DigitalOcean
 - Use MongoDB Atlas for cloud database
 
 ### Frontend Deployment
+
 - Build: `npm run build`
 - Deploy to Vercel, Netlify, or any static hosting service
 

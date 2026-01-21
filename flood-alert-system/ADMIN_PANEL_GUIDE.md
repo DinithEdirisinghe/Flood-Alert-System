@@ -25,6 +25,7 @@ Create a new monitoring station for your IoT device:
 4. Your new station appears on the map immediately!
 
 **Example Values for Testing:**
+
 ```
 Station ID: test-device-01
 Name: Test Device - My Room
@@ -54,6 +55,7 @@ Modify warning and danger levels for existing stations:
 Test your system without physical hardware!
 
 #### Quick Test (Single Reading):
+
 1. Click **"🎮 Device Simulator"** button
 2. Select a station from dropdown
 3. Set water level (e.g., `4.5` meters)
@@ -62,6 +64,7 @@ Test your system without physical hardware!
 6. Watch the dashboard update in real-time!
 
 #### Continuous Simulation:
+
 1. Select your station
 2. Set initial values
 3. Click **"▶️ Start Simulation (Every 10s)"**
@@ -70,6 +73,7 @@ Test your system without physical hardware!
 6. Click **"⏹️ Stop Simulation"** when done
 
 **Activity Log Shows:**
+
 - ✅ Successful transmissions with alert level
 - ❌ Any errors with details
 - Timestamp for each event
@@ -79,6 +83,7 @@ Test your system without physical hardware!
 ### 4️⃣ **View All Stations**
 
 The main table shows:
+
 - **Station ID**: Unique identifier
 - **Name**: Full station name
 - **Location**: GPS coordinates
@@ -88,6 +93,7 @@ The main table shows:
 - **Actions**: Edit or View buttons
 
 **Color Codes:**
+
 - 🟢 Green = NORMAL
 - 🟠 Orange = WARNING
 - 🔴 Red = DANGER
@@ -99,15 +105,18 @@ The main table shows:
 Once you've created a station in the Admin Panel:
 
 ### Step 1: Note Your Station ID
+
 After creating a station, copy the Station ID (e.g., `my-device-01`)
 
 ### Step 2: Get Your Computer's IP
+
 ```powershell
 ipconfig
 # Look for IPv4 Address, e.g., 192.168.1.100
 ```
 
 ### Step 3: Use This ESP32/Arduino Code
+
 ```cpp
 const char* serverIP = "192.168.1.100";  // Your computer's IP
 const char* stationId = "my-device-01";   // Your station ID from admin panel
@@ -117,17 +126,18 @@ void sendData(float waterLevel, int battery) {
   HTTPClient http;
   http.begin(url);
   http.addHeader("Content-Type", "application/json");
-  
-  String json = "{\"stationId\":\"" + String(stationId) + 
-                "\",\"waterLevel\":" + String(waterLevel) + 
+
+  String json = "{\"stationId\":\"" + String(stationId) +
+                "\",\"waterLevel\":" + String(waterLevel) +
                 ",\"batteryLevel\":" + String(battery) + "}";
-  
+
   http.POST(json);
   http.end();
 }
 ```
 
 ### Step 4: Test Connection
+
 1. Open Device Simulator
 2. Select your station
 3. Click "Send Once"
@@ -167,16 +177,19 @@ void sendData(float waterLevel, int battery) {
 ## Tips & Tricks
 
 ### 🎯 Testing Tips:
+
 - Use the simulator to test different water levels
 - Try values above warning/danger thresholds to see alerts
 - Start simulation and watch the chart update in Station Detail page
 
 ### 🔧 Troubleshooting:
+
 - **Can't create station?** Check if Station ID is unique
 - **Simulator not working?** Make sure backend is running on port 5000
 - **Device can't connect?** Check firewall allows port 5000
 
 ### 💡 Best Practices:
+
 - Use descriptive station names
 - Set realistic thresholds based on location
 - Test with simulator before deploying device
@@ -186,13 +199,13 @@ void sendData(float waterLevel, int battery) {
 
 ## Quick Reference
 
-| Action | Location | Purpose |
-|--------|----------|---------|
-| Create Station | Admin Panel → Add New Station | Setup new IoT device |
-| Edit Thresholds | Admin Panel → Edit button | Adjust alert levels |
-| Test System | Admin Panel → Device Simulator | Verify without hardware |
-| View Live Data | Dashboard → Click marker | See current status |
-| Historical Data | Station Detail page | View 24h trends |
+| Action          | Location                       | Purpose                 |
+| --------------- | ------------------------------ | ----------------------- |
+| Create Station  | Admin Panel → Add New Station  | Setup new IoT device    |
+| Edit Thresholds | Admin Panel → Edit button      | Adjust alert levels     |
+| Test System     | Admin Panel → Device Simulator | Verify without hardware |
+| View Live Data  | Dashboard → Click marker       | See current status      |
+| Historical Data | Station Detail page            | View 24h trends         |
 
 ---
 

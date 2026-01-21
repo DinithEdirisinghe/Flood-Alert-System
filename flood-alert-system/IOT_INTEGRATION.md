@@ -3,18 +3,21 @@
 ## Quick Reference for Your Physical Sensor
 
 ### Device Requirements
+
 - Water level sensor (ultrasonic or pressure-based)
 - Microcontroller (ESP32, Arduino, Raspberry Pi)
 - WiFi/Cellular connectivity
 - Battery monitoring capability
 
 ### API Endpoint
+
 ```
 POST http://your-server-ip:5000/api/readings
 Content-Type: application/json
 ```
 
 ### Data Format
+
 ```json
 {
   "stationId": "kelani-01",
@@ -24,6 +27,7 @@ Content-Type: application/json
 ```
 
 ### Response
+
 ```json
 {
   "success": true,
@@ -62,7 +66,7 @@ const int BATTERY_PIN = 34;
 
 void setup() {
   Serial.begin(115200);
-  
+
   // Initialize WiFi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -70,7 +74,7 @@ void setup() {
     Serial.println("Connecting to WiFi...");
   }
   Serial.println("Connected to WiFi");
-  
+
   // Initialize sensors
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
@@ -79,13 +83,13 @@ void setup() {
 void loop() {
   // Read water level (ultrasonic sensor)
   float waterLevel = readWaterLevel();
-  
+
   // Read battery level
   int batteryLevel = readBatteryLevel();
-  
+
   // Send data to server
   sendDataToServer(waterLevel, batteryLevel);
-  
+
   // Wait 5 minutes before next reading
   delay(300000);
 }
@@ -97,14 +101,14 @@ float readWaterLevel() {
   digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
-  
+
   // Read echo
   long duration = pulseIn(ECHO_PIN, HIGH);
   float distance = duration * 0.034 / 2; // in cm
-  
+
   // Convert to meters (adjust based on sensor placement)
   float waterLevel = 10.0 - (distance / 100.0); // Example: 10m max height
-  
+
   return waterLevel;
 }
 
@@ -120,26 +124,26 @@ void sendDataToServer(float waterLevel, int batteryLevel) {
     HTTPClient http;
     http.begin(serverUrl);
     http.addHeader("Content-Type", "application/json");
-    
+
     // Create JSON payload
     StaticJsonDocument<200> doc;
     doc["stationId"] = stationId;
     doc["waterLevel"] = waterLevel;
     doc["batteryLevel"] = batteryLevel;
-    
+
     String jsonString;
     serializeJson(doc, jsonString);
-    
+
     // Send POST request
     int httpResponseCode = http.POST(jsonString);
-    
+
     if (httpResponseCode > 0) {
       String response = http.getString();
       Serial.println("Response: " + response);
     } else {
       Serial.println("Error sending data");
     }
-    
+
     http.end();
   }
 }
@@ -172,7 +176,7 @@ def send_data():
         "waterLevel": read_water_level(),
         "batteryLevel": read_battery_level()
     }
-    
+
     try:
         response = requests.post(SERVER_URL, json=data)
         if response.status_code == 201:
@@ -192,6 +196,7 @@ if __name__ == "__main__":
 ## Testing Your Device
 
 ### 1. Test Connection
+
 ```bash
 curl -X POST http://localhost:5000/api/readings \
   -H "Content-Type: application/json" \
@@ -199,7 +204,9 @@ curl -X POST http://localhost:5000/api/readings \
 ```
 
 ### 2. Check Response
+
 Should return:
+
 ```json
 {
   "success": true,
@@ -208,16 +215,19 @@ Should return:
 ```
 
 ### 3. View on Dashboard
+
 Open http://localhost:5173 and check the map for your station
 
 ## Sensor Calibration
 
 ### Water Level Sensor
+
 1. Measure actual water level with ruler/tape
 2. Compare with sensor reading
 3. Adjust formula: `actualLevel = sensorReading * calibrationFactor + offset`
 
 ### Battery Monitor
+
 1. Measure actual battery voltage with multimeter
 2. Compare with ADC reading
 3. Adjust mapping values
@@ -225,18 +235,21 @@ Open http://localhost:5173 and check the map for your station
 ## Troubleshooting
 
 ### Device Can't Connect
+
 - Check WiFi credentials
 - Verify server IP address
 - Ensure port 5000 is accessible
 - Check firewall settings
 
 ### Incorrect Readings
+
 - Calibrate sensors
 - Check sensor placement
 - Verify power supply stability
 - Test with known distances/voltages
 
 ### Data Not Appearing
+
 - Check station ID matches database
 - Verify JSON format
 - Check server logs
@@ -245,18 +258,21 @@ Open http://localhost:5173 and check the map for your station
 ## Production Deployment
 
 ### Security
+
 - Use HTTPS instead of HTTP
 - Add API key authentication
 - Implement rate limiting
 - Use VPN or secure tunnel
 
 ### Reliability
+
 - Add retry logic for failed requests
 - Store data locally if connection fails
 - Implement watchdog timer
 - Use deep sleep to save battery
 
 ### Monitoring
+
 - Track successful transmissions
 - Log errors for debugging
 - Monitor battery voltage
@@ -278,6 +294,7 @@ Open http://localhost:5173 and check the map for your station
 ## Support
 
 For issues or questions:
+
 1. Check server logs: `npm run dev` in backend
 2. Check browser console for frontend errors
 3. Test API endpoint with Postman/curl
